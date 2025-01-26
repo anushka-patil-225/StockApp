@@ -28,7 +28,7 @@
   width: 400px; /* Fixed width for the form */
   padding: 30px; /* Adds padding inside the form */
   border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Enhanced shadow effect */
 }
 
 /* Form title */
@@ -105,41 +105,46 @@
 /*LoginFormCSS*/
 
 
-  .portfolio-section {
-    display: flex; /* Enables flexbox */
-    justify-content: space-between; /* Places items on the left and right */
-    align-items: center; /* Centers items vertically */
-    padding: 20px; /* Adds padding for spacing */
-    color: black; /* Ensures text is readable */
-    border-radius: 8px; /* Smooth corners */
-  }
-  
+.portfolio-section {
+  display: flex;
+  justify-content: space-around; /* Distributes space evenly */
+  align-items: center;
+  padding: 40px; /* Adds padding for breathing room */
+  gap: 20px; /* Adds space between form and chart */
+  color: black;
+  border-radius: 12px;
+  flex-wrap: wrap; /* Makes the layout responsive */
+}
+
   .portfolio-info {
     flex: 2; /* Takes up space on the left */
     padding: 20px; /* Adds inner spacing */
-    background-color: rgb(215, 207, 207);
+    background-color: rgb(143, 224, 197);
   }
   
-  .portfolio-chart {
-    flex: 1; /* Maintain flex properties */
-    text-align: center; /* Center content */
-    padding: 20px; /* Inner spacing */
-    background: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
-    border-radius: 8px; /* Smooth corners */
-    width: 60%; /* Reduce width to half the screen */
-    max-width: 500px; /* Ensure it doesn't grow too large */
-    margin: 0 auto; /* Center horizontally */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
+  .shared-container {
+    flex: 1;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
   }
+
+  .portfolio-chart {
+    text-align: center;
+  }
+
   
   
   .portfolio-info h1 {
     margin: 10px 0; /* Adds spacing between text elements */
     font-size: x-large;
     font-weight: bold;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-
+    font-family: 'Courier New', Courier, monospace;
   }
   
   .portfolio-chart h3 {
@@ -161,10 +166,11 @@
 }
 
 .stock-table thead {
-  background-color: rgb(3, 123, 102); /* Attractive green header */
+  background-color: rgb(183, 204, 201); /* Attractive green header */
   color: #fff; /* White text for header */
   text-transform: uppercase; /* Capitalize header text */
   letter-spacing: 0.05em; /* Slightly increase spacing */
+  color:rgb(7, 91, 77) ;
 }
 
 .stock-table th,
@@ -190,7 +196,7 @@
 .stock-table th {
   font-weight: bold; /* Bold header text */
   font-size: 1rem; /* Slightly larger header text */
-  border-bottom: 2px solid rgb(3, 123, 102);; /* Thicker border below header */
+  border-bottom: 2px solid rgb(183, 204, 201); /* Thicker border below header */
 }
 
 .stock-table td {
@@ -206,10 +212,11 @@
   border-radius: 4px; /* Rounded corners */
   cursor: pointer; /* Pointer cursor */
   transition: transform 0.2s ease; /* Smooth hover effect */
+  margin-right: 8px; /* Add space between buttons */
 }
 
 .edit-btn {
-  background-color: #1E88E5; /* Blue for edit */
+  background-color: rgb(45, 181, 160); /* Blue for edit */
   color: white; /* White text */
 }
 
@@ -219,7 +226,7 @@
 }
 
 .edit-btn:hover {
-  background-color: #1565C0; /* Darker blue on hover */
+  background-color: rgb(28, 109, 97); /* Darker blue on hover */
   transform: scale(1.05); /* Slight zoom on hover */
 }
 
@@ -228,15 +235,15 @@
   transform: scale(1.05); /* Slight zoom on hover */
 }
 
-/* Responsive Design */
+/* Add Responsiveness */
 @media (max-width: 768px) {
-  .stock-table {
-    font-size: 0.9rem; /* Slightly smaller text for mobile */
+  .portfolio-section {
+    flex-direction: column;
+    align-items: center;
   }
 
-  .stock-table th,
-  .stock-table td {
-    padding: 12px 10px; /* Adjust padding for mobile */
+  .shared-container {
+    max-width: 90%;
   }
 }
 
@@ -413,4 +420,32 @@
 
 .no-btn:hover {
   background-color: #d6d6d6;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between; /* Space out title and button */
+  align-items: center;
+  padding: 10px 20px;
+  background-color: rgb(183, 204, 201);
+}
+
+.header-title {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.logout-button {
+  padding: 8px 12px;
+  font-size: 0.9em;
+  background-color:  rgb(3, 123, 102);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color:  rgb(2, 91, 76);
 }

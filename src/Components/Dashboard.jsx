@@ -104,8 +104,6 @@ const Dashboard = () => {
 
       <section className="stock-list-section">
         <br />
-        <h3>Stock List</h3>
-        <br />
         <table className="stock-table">
           <thead>
             <tr>
