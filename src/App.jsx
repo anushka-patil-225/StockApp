@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import './App.css';
-import Header from './Components/Header';
-import LoginForm from './Components/LoginForm';
-import RegistrationForm from './Components/RegistrationForm';
-import Dashboard from './Components/Dashboard'; // Import the Dashboard component
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
+import Header from "./Components/Header";
+import LoginForm from "./Components/LoginForm";
+import RegistrationForm from "./Components/RegistrationForm";
+import Dashboard from "./Components/Dashboard"; // Import the Dashboard component
 
 function App() {
   const [showLogin, setShowLogin] = useState(true); // To toggle between LoginForm and RegistrationForm
@@ -26,7 +26,8 @@ function App() {
             )
           }
         />
-        <Route path="/dashboard" element={<Dashboard />} />
+        {/* Route with dynamic ID for Dashboard */}
+        <Route path="/dashboard/:id" element={<Dashboard />} />
       </Routes>
     </Router>
   );

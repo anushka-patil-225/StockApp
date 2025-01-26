@@ -1,17 +1,56 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const LoginForm = ({ onClose, onShowRegister }) => {
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const navigate = useNavigate(); // Initialize useNavigate for navigation
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login Data:", formData); // Replace with actual login logic
-    onClose?.();
+
+    try {
+      // Make API call to login endpoint
+      const response = await axios.post(
+        "http://localhost:8080/api/users/login",
+        {
+          email: formData.email,
+          password: formData.password,
+        }
+      );
+
+      // Assuming the response contains token and id
+      const { token, userId } = response.data;
+
+      // Save the token in localStorage
+      if (token) {
+        localStorage.setItem("authToken", token);
+        console.log("Token saved to localStorage:", token);
+      } else {
+        console.warn("Token not found in the response.");
+      }
+
+      if (userId) {
+        console.log("User ID:", userId);
+        // Navigate to the dashboard with the user ID as a query parameter
+        navigate(`/dashboard/${userId}`);
+      } else {
+        console.warn("User ID not found in the response.");
+      }
+
+      // Reset the form and error state
+      setFormData({ email: "", password: "" });
+      setError(""); // Clear any existing errors
+    } catch (error) {
+      console.error("Error during login:", error);
+      setError("Invalid email or password. Please try again.");
+    }
   };
 
   const handleGuestLogin = () => {
@@ -23,6 +62,7 @@ const LoginForm = ({ onClose, onShowRegister }) => {
     <div className="modal">
       <form className="form" onSubmit={handleSubmit}>
         <h3>Login</h3>
+        {error && <p className="error">{error}</p>}
         <label>Email</label>
         <input
           type="email"
@@ -40,7 +80,9 @@ const LoginForm = ({ onClose, onShowRegister }) => {
           required
         />
         <div className="form-actions">
-          <button type="submit" className="btn submit-btn">Login</button>
+          <button type="submit" className="btn submit-btn">
+            Login
+          </button>
           <button
             type="button"
             className="btn guest-btn"
