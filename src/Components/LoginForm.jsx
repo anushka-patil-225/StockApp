@@ -54,7 +54,18 @@ const LoginForm = ({ onClose, onShowRegister }) => {
   };
 
   const handleGuestLogin = () => {
-    console.log("Logged in as Guest"); // Replace with actual guest login logic
+    // Set the email and password for the guest user
+    setFormData({
+      email: "john.doe@example.com",
+      password: "password123"
+    });
+
+    // Optionally submit the form after setting the values
+    setTimeout(() => {
+      handleSubmit(new Event('submit')); // Trigger the form submission programmatically
+    }, 0);
+
+    console.log("Logged in as Guest");
     onClose?.();
   };
 
@@ -88,7 +99,7 @@ const LoginForm = ({ onClose, onShowRegister }) => {
             className="btn guest-btn"
             onClick={handleGuestLogin}
           >
-            Login as Guest
+            Get Demo Credentials
           </button>
         </div>
         <div className="register-link">
