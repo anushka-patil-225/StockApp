@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from "react";
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import { Pie } from 'react-chartjs-2';
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie } from "react-chartjs-2";
 import StockForm from "./StockForm";
 import EditStockForm from "./EditStockForm";
 import DeleteConfirmation from "./DeleteConfirmation";
 import Footer from "./Footer";
 
-
 // Register required elements
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Dashboard = () => {
+  const { id } = useParams(); // Retrieve the 'id' parameter from the URL
   const [stocks, setStocks] = useState([]);
   const [portfolioValue, setPortfolioValue] = useState(0);
   const [topStock, setTopStock] = useState("");
@@ -23,30 +20,59 @@ const Dashboard = () => {
   const [selectedStock, setSelectedStock] = useState(null);
   const [stockToDelete, setStockToDelete] = useState(null);
 
-
   useEffect(() => {
-    const dummyStocks = [
-      { name: "Apple", ticker: "AAPL", quantity: 10, buyPrice: 150, currentPrice: 170 },
-      { name: "Tesla", ticker: "TSLA", quantity: 5, buyPrice: 600, currentPrice: 650 },
-      { name: "Google", ticker: "GOOGL", quantity: 8, buyPrice: 2800, currentPrice: 2900 },
-      { name: "Amazon", ticker: "AMZN", quantity: 12, buyPrice: 3400, currentPrice: 3500 },
-      { name: "Microsoft", ticker: "MSFT", quantity: 6, buyPrice: 300, currentPrice: 310 },
-    ];
+    const fetchStocks = async () => {
+      try {
+        // Retrieve the token from localStorage
+        const token = localStorage.getItem("authToken");
 
-    setStocks(dummyStocks);
+        // Ensure the token exists before making the request
+        if (!token) {
+          console.error("No token found. Redirecting to login...");
+          // Redirect to login or handle the absence of a token
+          return;
+        }
 
-    // Calculate total portfolio value
-    const totalValue = dummyStocks.reduce((sum, stock) => {
-      return sum + stock.quantity * stock.currentPrice;
-    }, 0);
-    setPortfolioValue(totalValue);
+        // Make the API call with the token in the Authorization header
+        const response = await axios.get(
+          `http://localhost:8080/api/stocks/user/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-    // Find top-performing stock
-    const top = dummyStocks.reduce((prev, current) => {
-      return prev.currentPrice > current.currentPrice ? prev : current;
-    });
-    setTopStock(top.name);
-  }, []);
+        const fetchedStocks = response.data;
+
+        // Convert fetched stock data to include currentPrice (dummy values for now)
+        const processedStocks = fetchedStocks.map((stock) => ({
+          ...stock,
+          currentPrice: stock.buyPrice + 20, // Add 20 as a dummy increase in price
+        }));
+
+        setStocks(processedStocks);
+
+        // Calculate total portfolio value
+        const totalValue = processedStocks.reduce((sum, stock) => {
+          return sum + stock.quantity * stock.currentPrice;
+        }, 0);
+        setPortfolioValue(totalValue);
+
+        // Find top-performing stock
+        const top = processedStocks.reduce((prev, current) => {
+          return prev.currentPrice > current.currentPrice ? prev : current;
+        });
+        setTopStock(top.name);
+      } catch (error) {
+        console.error("Error fetching stocks:", error);
+      }
+    };
+
+    if (id) {
+      fetchStocks();
+    }
+  }, [stocks][id]);
 
   const handleEdit = (stock) => {
     setSelectedStock(stock);
@@ -80,28 +106,78 @@ const Dashboard = () => {
       {
         label: "Portfolio Distribution",
         data: stocks.map((stock) => stock.quantity * stock.currentPrice),
-        backgroundColor: ["#36A2EB", "#FF6384", "#FFCE56", "#4BC0C0", "#9966FF"],
+        backgroundColor: [
+          "#36A2EB",
+          "#FF6384",
+          "#FFCE56",
+          "#4BC0C0",
+          "#9966FF",
+        ],
       },
     ],
   };
 
-  return (<div>
-    <div style={{ padding: "20px" }}>
-      <br />
-      <section className="portfolio-section">
-        <StockForm />
+  return (
+    <div>
+      <div style={{ padding: "20px" }}>
+        <br />
+        <section className="portfolio-section">
+          {/* Pass the id to StockForm */}
+          <StockForm userId={id} />
 
-        <div className="portfolio-chart">
-          <div className="portfolio-info">
-            <h1>Total Portfolio Value: ₹{portfolioValue.toFixed(2)}</h1>
-            <h1>Top-Performing Stock: {topStock}</h1>
+          <div className="portfolio-chart">
+            <div className="portfolio-info">
+              <h1>Total Portfolio Value: ₹{portfolioValue.toFixed(2)}</h1>
+              <h1>Top-Performing Stock: {topStock}</h1>
+            </div>
+            <br />
+            <h3>Portfolio Distribution</h3>
+            <Pie data={pieData} />
           </div>
-          <br />
-          <h3>Portfolio Distribution</h3>
-          <Pie data={pieData} />
-        </div>
-      </section>
+        </section>
 
+        <section className="stock-list-section">
+          <br />
+          <h3>Stock List</h3>
+          <br />
+          <table className="stock-table">
+            <thead>
+              <tr>
+                <th>Stock Name</th>
+                <th>Ticker</th>
+                <th>Quantity</th>
+                <th>Buy Price</th>
+                <th>Current Value</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stocks.map((stock) => (
+                <tr key={stock.ticker}>
+                  <td>{stock.name}</td>
+                  <td>{stock.ticker}</td>
+                  <td>{stock.quantity}</td>
+                  <td>₹{stock.buyPrice.toFixed(2)}</td>
+                  <td>₹{(stock.quantity * stock.currentPrice).toFixed(2)}</td>
+                  <td>
+                    <button
+                      className="edit-btn"
+                      onClick={() => handleEdit(stock)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="delete-btn"
+                      onClick={() => setStockToDelete(stock)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
       <section className="stock-list-section">
         <br />
         <table className="stock-table">
@@ -139,27 +215,26 @@ const Dashboard = () => {
         </table>
       </section>
 
-      {isEditing && (
-        <EditStockForm
-          stock={selectedStock}
-          onUpdate={handleUpdateStock}
-          onCancel={handleCancelEdit}
-        />
-      )}
+        {isEditing && (
+          <EditStockForm
+            stock={selectedStock}
+            onUpdate={handleUpdateStock}
+            onCancel={handleCancelEdit}
+          />
+        )}
 
-{stockToDelete && (
-        <DeleteConfirmation
-          stock={stockToDelete}
-          onDelete={handleDeleteStock}
-          onCancel={() => setStockToDelete(null)}
-        />
-      )}
-      
-    </div>
+        {stockToDelete && (
+          <DeleteConfirmation
+            stock={stockToDelete}
+            onDelete={handleDeleteStock}
+            onCancel={() => setStockToDelete(null)}
+          />
+        )}
+      </div>
 
-    <div>
-      <Footer/>
-    </div>
+      <div>
+        <Footer />
+      </div>
     </div>
   );
 };

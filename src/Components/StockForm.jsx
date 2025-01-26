@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const StockForm = ({ onSave, stockToEdit, onCancel }) => {
-  // Initial form state
+const StockForm = ({ onSave, stockToEdit, onCancel, userId }) => {
   const initialFormState = {
     name: "",
     ticker: "",
@@ -13,23 +12,20 @@ const StockForm = ({ onSave, stockToEdit, onCancel }) => {
   const [formData, setFormData] = useState(initialFormState);
   const [isTickerFilled, setIsTickerFilled] = useState(false);
 
-  // Populate form data when editing an existing stock
   useEffect(() => {
     if (stockToEdit) {
       setFormData(stockToEdit);
     }
   }, [stockToEdit]);
 
-  // Track if both name and ticker are filled
   useEffect(() => {
     if (formData.name && formData.ticker) {
-      setIsTickerFilled(true); // Trigger price fetch when both are filled
+      setIsTickerFilled(true);
     } else {
-      setIsTickerFilled(false); // Reset if any field is cleared
+      setIsTickerFilled(false);
     }
   }, [formData.name, formData.ticker]);
 
-  // Fetch real-time stock price based on ticker
   useEffect(() => {
     if (isTickerFilled) {
       fetchStockPrice(formData.ticker);
@@ -38,15 +34,13 @@ const StockForm = ({ onSave, stockToEdit, onCancel }) => {
 
   const fetchStockPrice = async (ticker) => {
     try {
-      // Use a free stock price API like Alpha Vantage
-      const response = await axios.get(
-        `https://www.alphavantage.co/query`, {
-          params: {
-            function: "GLOBAL_QUOTE",
-            symbol: ticker,
-            apikey: "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=%s&apikey=YOUR_API_KEY", // Replace with your own API key
-          }
-        });
+      const response = await axios.get(`https://www.alphavantage.co/query`, {
+        params: {
+          function: "GLOBAL_QUOTE",
+          symbol: ticker,
+          apikey: "YOUR_API_KEY", // Replace with your API key
+        },
+      });
 
       if (response.data["Global Quote"]) {
         const latestPrice = response.data["Global Quote"]["05. price"];
@@ -59,7 +53,7 @@ const StockForm = ({ onSave, stockToEdit, onCancel }) => {
       }
     } catch (error) {
       console.error("Error fetching stock price:", error);
-      alert("Unable to fetch stock price");
+      // alert("Unable to fetch stock price");
     }
   };
 
@@ -68,10 +62,16 @@ const StockForm = ({ onSave, stockToEdit, onCancel }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     // Validation
-    if (!formData.name || !formData.ticker || !formData.quantity || !formData.buyPrice) {
+    if (
+      !formData.name ||
+      !formData.ticker ||
+      !formData.quantity ||
+      !formData.buyPrice
+    ) {
       alert("Please fill out all fields.");
       return;
     }
@@ -81,11 +81,51 @@ const StockForm = ({ onSave, stockToEdit, onCancel }) => {
       return;
     }
 
-    // Call parent onSave function with form data
-    onSave({ ...formData, quantity: Number(formData.quantity), buyPrice: Number(formData.buyPrice) });
+    try {
+      // Retrieve the token from localStorage
+      const token = localStorage.getItem("authToken");
 
-    // Reset form after submission
-    setFormData(initialFormState);
+      if (!token) {
+        alert("You must be logged in to perform this action.");
+        return;
+      }
+
+      // Get the current date as purchaseDate
+      const purchaseDate = new Date().toISOString().split("T")[0]; // Format as YYYY-MM-DD
+
+      // Prepare the payload
+      const payload = {
+        name: formData.name,
+        ticker: formData.ticker,
+        quantity: Number(formData.quantity),
+        buyPrice: Number(formData.buyPrice),
+        purchaseDate: purchaseDate,
+        user: {
+          id: Number(userId), // Use the id prop passed from the parent
+        },
+      };
+
+      // Make API call to save stock
+      const response = await axios.post(
+        "http://localhost:8080/api/stocks",
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Stock saved successfully:", response.data);
+
+      // Call parent onSave function with response data
+      onSave(response.data);
+
+      // Reset form after submission
+      setFormData(initialFormState);
+    } catch (error) {
+      console.error("Error saving stock:", error);
+    }
   };
 
   return (
@@ -94,9 +134,11 @@ const StockForm = ({ onSave, stockToEdit, onCancel }) => {
         {stockToEdit ? "Edit Stock" : "Add Stock"}
       </h2>
       <form onSubmit={handleSubmit}>
-        {/* Stock Name */}
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="name">
+          <label
+            className="block text-gray-700 text-sm font-medium mb-2"
+            htmlFor="name"
+          >
             Stock Name
           </label>
           <input
@@ -110,10 +152,11 @@ const StockForm = ({ onSave, stockToEdit, onCancel }) => {
             required
           />
         </div>
-
-        {/* Ticker */}
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="ticker">
+          <label
+            className="block text-gray-700 text-sm font-medium mb-2"
+            htmlFor="ticker"
+          >
             Ticker Symbol
           </label>
           <input
@@ -127,10 +170,11 @@ const StockForm = ({ onSave, stockToEdit, onCancel }) => {
             required
           />
         </div>
-
-        {/* Quantity */}
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="quantity">
+          <label
+            className="block text-gray-700 text-sm font-medium mb-2"
+            htmlFor="quantity"
+          >
             Quantity
           </label>
           <input
@@ -145,10 +189,11 @@ const StockForm = ({ onSave, stockToEdit, onCancel }) => {
             min="1"
           />
         </div>
-
-        {/* Buy Price */}
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="buyPrice">
+          <label
+            className="block text-gray-700 text-sm font-medium mb-2"
+            htmlFor="buyPrice"
+          >
             Buy Price ($)
           </label>
           <input
@@ -165,20 +210,19 @@ const StockForm = ({ onSave, stockToEdit, onCancel }) => {
             readOnly
           />
         </div>
-
-        {/* Action Buttons */}
         <div className="flex justify-between items-center">
           <button
             type="button"
             onClick={() => {
               onCancel?.();
-              setFormData(initialFormState); // Reset the form on cancel
+              setFormData(initialFormState);
             }}
             className="px-6 py-2 text-sm font-semibold text-gray-800 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
           >
             Cancel
           </button>
-          <button style={{ backgroundColor: "rgb(3, 123, 102)" }}
+          <button
+            style={{ backgroundColor: "rgb(3, 123, 102)" }}
             type="submit"
             className="px-6 py-2 text-sm font-semibold text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
