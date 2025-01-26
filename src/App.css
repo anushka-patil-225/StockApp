@@ -1,42 +1,145 @@
+/* Header Styling */
 .header {
-    width: 100%;
-    background-color: #4CAF50; /* A green background */
-    color: white; /* White text */
-    text-align: center; /* Center the text */
-    padding: 20px 0; /* Add some padding for height */
-    margin: 0; /* Remove default margin */
-    font-size: 2.5em; /* Make the text larger */
-    font-family: Arial, sans-serif; /* Choose a clean font */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: rgb(220, 218, 218);
+  color: rgb(3, 123, 102);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Title Styling */
+.header-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: rgb(3, 123, 102);
+  margin: 0;
+}
+
+/*LoginformCSS*/
+/* Centering the form on the screen */
+.form {
+  position: fixed; /* Keeps the form fixed on the viewport */
+  top: 50%; /* Centers the form vertically */
+  left: 50%; /* Centers the form horizontally */
+  transform: translate(-50%, -50%); /* Corrects for element's size offset */
+  background-color: white; /* Background color of the form */
+  width: 400px; /* Fixed width for the form */
+  padding: 30px; /* Adds padding inside the form */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
+}
+
+/* Form title */
+.form h3 {
+  text-align: center; /* Centers the heading */
+  margin-bottom: 20px; /* Adds space below the heading */
+  font-size: 24px; /* Larger font size for the title */
+  font-weight: bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+/* Styling for labels */
+.form label {
+  display: block; /* Ensures labels appear on their own line */
+  margin-bottom: 8px; /* Space between label and input */
+}
+
+/* Styling for input fields */
+.form input {
+  width: 100%; /* Full width of the form */
+  padding: 10px; /* Adds padding inside the input */
+  margin-bottom: 20px; /* Space below each input field */
+  border: 1px solid #ccc; /* Light gray border */
+  border-radius: 5px; /* Rounded corners for inputs */
+  font-size: 16px; /* Slightly larger font size for readability */
+}
+
+/* Actions section styling */
+.form-actions {
+  display: flex; /* Flex container for buttons */
+  flex-direction: column; /* Buttons stacked vertically */
+  gap: 10px; /* Space between buttons */
+}
+
+/* Submit and Guest buttons */
+.submit-btn,
+.guest-btn {
+  background-color: rgb(3, 123, 102); /* Blue background color */
+  color: white; /* White text color */
+  border: none; /* Removes default border */
+  padding: 10px; /* Adds padding inside buttons */
+  border-radius: 5px; /* Rounded button corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 20px; /* Consistent button font size */
+  text-align: center; /* Centers text within buttons */
+}
+
+/* Hover effect for buttons */
+.submit-btn:hover,
+.guest-btn:hover {
+  background-color: rgb(7, 91, 77); /* Darker blue on hover */
+}
+
+/* Register link styling */
+.register-link {
+  text-align: center; /* Centers the text */
+  margin-top: 20px; /* Adds space above the link section */
+}
+
+/* Link button styling */
+.link-btn {
+  background: none; /* No background */
+  border: none; /* Removes default border */
+  color: rgb(3, 123, 102); /* Blue text for the link */
+  cursor: pointer; /* Pointer cursor for link */
+  font-size: 14px; /* Smaller font size for the link */
+  text-decoration: underline; /* Underlined text */
+}
+
+/* Hover effect for links */
+.link-btn:hover {
+  color: rgb(7, 91, 77); /* Darker blue on hover */
+}
+/*LoginFormCSS*/
+
 
   .portfolio-section {
     display: flex; /* Enables flexbox */
     justify-content: space-between; /* Places items on the left and right */
     align-items: center; /* Centers items vertically */
     padding: 20px; /* Adds padding for spacing */
-    background: linear-gradient(135deg, #4CAF50, #1E88E5); /* Attractive gradient background */
-    color: white; /* Ensures text is readable */
+    color: black; /* Ensures text is readable */
     border-radius: 8px; /* Smooth corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
   }
   
   .portfolio-info {
-    flex: 1; /* Takes up space on the left */
+    flex: 2; /* Takes up space on the left */
     padding: 20px; /* Adds inner spacing */
+    background-color: rgb(215, 207, 207);
   }
   
   .portfolio-chart {
-    flex: 1; /* Takes up space on the right */
-    text-align: center; /* Centers content in the chart section */
-    padding: 20px; /* Adds inner spacing */
-    background: rgba(255, 255, 255, 0.2); /* Semi-transparent background for contrast */
+    flex: 1; /* Maintain flex properties */
+    text-align: center; /* Center content */
+    padding: 20px; /* Inner spacing */
+    background: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
     border-radius: 8px; /* Smooth corners */
+    width: 60%; /* Reduce width to half the screen */
+    max-width: 500px; /* Ensure it doesn't grow too large */
+    margin: 0 auto; /* Center horizontally */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
   }
   
-  .portfolio-info h2,
-  .portfolio-info h3 {
+  
+  .portfolio-info h1 {
     margin: 10px 0; /* Adds spacing between text elements */
+    font-size: x-large;
+    font-weight: bold;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+
   }
   
   .portfolio-chart h3 {
@@ -44,87 +147,270 @@
     font-weight: bold; /* Emphasizes the heading */
   }
 
-  .stock-list-section {
-    width: 100%; /* Full width */
-    padding: 20px; /* Inner spacing */
-    background-color: #f9f9f9; /* Light background for contrast */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-  }
-  
-  .stock-list-section h3 {
-    text-align: center; /* Center the heading */
-    font-size: 1.8em; /* Larger font size */
-    color: #333; /* Darker text color */
-    margin-bottom: 20px; /* Space below heading */
-    background-color: #4CAF50; /* A green background */
-    color: white; /* White text */
-    padding: 20px 0; /* Add some padding for height */
+  /* Enhanced Table Styling */
+.stock-table {
+  width: 100%; /* Full width table */
+  border-collapse: collapse; /* Remove gaps between cells */
+  margin: 20px 0; /* Add spacing around the table */
+  font-size: 1rem; /* Make text slightly larger */
+  font-family: 'Arial', sans-serif; /* Use a clean font */
+  background-color: #fff; /* White background for the table */
+  border-radius: 8px; /* Rounded corners */
+  overflow: hidden; /* Prevent overflow on rounded edges */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
-  
+
+.stock-table thead {
+  background-color: rgb(3, 123, 102); /* Attractive green header */
+  color: #fff; /* White text for header */
+  text-transform: uppercase; /* Capitalize header text */
+  letter-spacing: 0.05em; /* Slightly increase spacing */
+}
+
+.stock-table th,
+.stock-table td {
+  padding: 15px 20px; /* Add ample padding */
+  text-align: left; /* Align text to the left */
+  border-bottom: 1px solid #ddd; /* Subtle border for rows */
+}
+
+.stock-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* Light gray for alternate rows */
+}
+
+.stock-table tbody tr:nth-child(odd) {
+  background-color: #fff; /* White for alternate rows */
+}
+
+.stock-table tbody tr:hover {
+  background-color: #f1f8e9; /* Light green for hover effect */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.stock-table th {
+  font-weight: bold; /* Bold header text */
+  font-size: 1rem; /* Slightly larger header text */
+  border-bottom: 2px solid rgb(3, 123, 102);; /* Thicker border below header */
+}
+
+.stock-table td {
+  color: #555; /* Subtle text color */
+}
+
+/* Buttons Inside Table */
+.edit-btn,
+.delete-btn {
+  padding: 8px 12px; /* Button size */
+  font-size: 0.9em; /* Font size */
+  border: none; /* Remove default border */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  transition: transform 0.2s ease; /* Smooth hover effect */
+}
+
+.edit-btn {
+  background-color: #1E88E5; /* Blue for edit */
+  color: white; /* White text */
+}
+
+.delete-btn {
+  background-color: #E53935; /* Red for delete */
+  color: white; /* White text */
+}
+
+.edit-btn:hover {
+  background-color: #1565C0; /* Darker blue on hover */
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+.delete-btn:hover {
+  background-color: #B71C1C; /* Darker red on hover */
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .stock-table {
-    width: 100%; /* Full width table */
-    border-collapse: collapse; /* Remove space between cells */
-    text-align: left; /* Align text to the left */
+    font-size: 0.9rem; /* Slightly smaller text for mobile */
   }
-  
-  .stock-table thead {
-    background-color: #4CAF50; /* Green header background */
-    color: white; /* White text for header */
+
+  .stock-table th,
+  .stock-table td {
+    padding: 12px 10px; /* Adjust padding for mobile */
   }
-  
-  .stock-table th, .stock-table td {
-    padding: 15px; /* Add spacing inside cells */
-    border: 1px solid #ddd; /* Subtle border */
+}
+
+/* General Styles for the Modal */
+.edit-stock-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Form Container */
+.edit-stock-form {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
   }
-  
-  .stock-table tbody tr:nth-child(even) {
-    background-color: #f2f2f2; /* Alternating row colors */
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
-  
-  .stock-table tbody tr:hover {
-    background-color: #c0ffc0; /* Highlight on hover */
-  }
-  
-  .edit-btn, .delete-btn {
-    padding: 8px 12px; /* Button size */
-    font-size: 0.9em; /* Font size */
-    border: none; /* Remove default border */
-    border-radius: 4px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor */
-  }
-  
-  .edit-btn {
-    background-color: #1E88E5; /* Blue color for edit */
-    color: white; /* White text */
-  }
-  
-  .delete-btn {
-    background-color: #E53935; /* Red color for delete */
-    color: white; /* White text */
-  }
-  
-  .edit-btn:hover {
-    background-color: #1565C0; /* Darker blue on hover */
-  }
-  
-  .delete-btn:hover {
-    background-color: #B71C1C; /* Darker red on hover */
-  }
-  
-  .stock-form-container {
-    max-width: 400px;
-    margin: 0 auto;
-    background: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .stock-form h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  
+}
+
+/* Form Heading */
+.edit-stock-form h3 {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Labels */
+.edit-stock-form label {
+  display: block;
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+/* Inputs */
+.edit-stock-form input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.edit-stock-form input:focus {
+  border-color: #007bff;
+  box-shadow: 0px 0px 4px rgba(0, 123, 255, 0.3);
+}
+
+/* Form Buttons */
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.save-btn,
+.cancel-btn {
+  width: 48%;
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.save-btn {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.save-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.cancel-btn {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.cancel-btn:hover {
+  background-color: #d6d6d6;
+  transform: scale(1.05);
+}
+
+
+.delete-confirmation-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.delete-confirmation-box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.delete-confirmation-box h3 {
+  margin-bottom: 10px;
+  color: #ff4d4f;
+}
+
+.delete-confirmation-box p {
+  margin-bottom: 20px;
+  font-size: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-around;
+}
+
+.yes-btn {
+  background-color: #ff4d4f;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.yes-btn:hover {
+  background-color: #d9363e;
+}
+
+.no-btn {
+  background-color: #e0e0e0;
+  color: #333;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.no-btn:hover {
+  background-color: #d6d6d6;
+}

@@ -6,6 +6,11 @@ import {
   Legend,
 } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
+import StockForm from "./StockForm";
+import EditStockForm from "./EditStockForm";
+import DeleteConfirmation from "./DeleteConfirmation";
+import Footer from "./Footer";
+
 
 // Register required elements
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -14,9 +19,12 @@ const Dashboard = () => {
   const [stocks, setStocks] = useState([]);
   const [portfolioValue, setPortfolioValue] = useState(0);
   const [topStock, setTopStock] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [selectedStock, setSelectedStock] = useState(null);
+  const [stockToDelete, setStockToDelete] = useState(null);
+
 
   useEffect(() => {
-    // Use dummy data instead of API call
     const dummyStocks = [
       { name: "Apple", ticker: "AAPL", quantity: 10, buyPrice: 150, currentPrice: 170 },
       { name: "Tesla", ticker: "TSLA", quantity: 5, buyPrice: 600, currentPrice: 650 },
@@ -33,12 +41,37 @@ const Dashboard = () => {
     }, 0);
     setPortfolioValue(totalValue);
 
-    // Find top-performing stock0
+    // Find top-performing stock
     const top = dummyStocks.reduce((prev, current) => {
       return prev.currentPrice > current.currentPrice ? prev : current;
     });
     setTopStock(top.name);
   }, []);
+
+  const handleEdit = (stock) => {
+    setSelectedStock(stock);
+    setIsEditing(true);
+  };
+
+  const handleUpdateStock = (updatedStock) => {
+    setStocks((prevStocks) =>
+      prevStocks.map((stock) =>
+        stock.ticker === updatedStock.ticker ? updatedStock : stock
+      )
+    );
+    setIsEditing(false);
+    setSelectedStock(null);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setSelectedStock(null);
+  };
+
+  const handleDeleteStock = (ticker) => {
+    setStocks((prev) => prev.filter((stock) => stock.ticker !== ticker));
+    setStockToDelete(null);
+  };
 
   // Data for the Pie Chart
   const pieData = {
@@ -52,30 +85,28 @@ const Dashboard = () => {
     ],
   };
 
-  return (
+  return (<div>
     <div style={{ padding: "20px" }}>
-      <header>
-        <h1 class="header">Portfolio Tracker</h1>
-      </header>
-      <br/>
+      <br />
+      <section className="portfolio-section">
+        <StockForm />
 
-      <section class="portfolio-section">
-        <div class="portfolio-info">
-          <h2>Total Portfolio Value: ₹{portfolioValue.toFixed(2)}</h2>
-          <h3>Top-Performing Stock: {topStock}</h3>
-        </div>
-
-        <div class="portfolio-chart" style={{ width: "400px", margin: "0 auto" }}>
+        <div className="portfolio-chart">
+          <div className="portfolio-info">
+            <h1>Total Portfolio Value: ₹{portfolioValue.toFixed(2)}</h1>
+            <h1>Top-Performing Stock: {topStock}</h1>
+          </div>
+          <br />
           <h3>Portfolio Distribution</h3>
           <Pie data={pieData} />
         </div>
       </section>
 
-      <section class="stock-list-section">
-        <br/>
+      <section className="stock-list-section">
+        <br />
         <h3>Stock List</h3>
-        <br/>
-        <table class="stock-table">
+        <br />
+        <table className="stock-table">
           <thead>
             <tr>
               <th>Stock Name</th>
@@ -95,14 +126,42 @@ const Dashboard = () => {
                 <td>₹{stock.buyPrice.toFixed(2)}</td>
                 <td>₹{(stock.quantity * stock.currentPrice).toFixed(2)}</td>
                 <td>
-                  <button class="edit-btn">Edit</button>
-                  <button class="delete-btn">Delete</button>
+                  <button
+                    className="edit-btn"
+                    onClick={() => handleEdit(stock)}
+                  >Edit
+                  </button>
+                  <button 
+                    className="delete-btn"
+                    onClick={() => setStockToDelete(stock)}>Delete</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </section>
+
+      {isEditing && (
+        <EditStockForm
+          stock={selectedStock}
+          onUpdate={handleUpdateStock}
+          onCancel={handleCancelEdit}
+        />
+      )}
+
+{stockToDelete && (
+        <DeleteConfirmation
+          stock={stockToDelete}
+          onDelete={handleDeleteStock}
+          onCancel={() => setStockToDelete(null)}
+        />
+      )}
+      
+    </div>
+
+    <div>
+      <Footer/>
+    </div>
     </div>
   );
 };
