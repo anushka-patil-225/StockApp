@@ -49,7 +49,6 @@ const LoginForm = ({ onClose, onShowRegister }) => {
       setError(""); // Clear any existing errors
     } catch (error) {
       console.error("Error during login:", error);
-      setError("Invalid email or password. Please try again.");
     }
   };
 
